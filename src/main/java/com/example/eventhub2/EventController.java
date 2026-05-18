@@ -175,7 +175,7 @@ public class EventController {
 
         // Generate tiket gratis atau berbayar
         Tiket tiket;
-        if ("gratis".equalsIgnoreCase(ev.getTipeHarga())) {
+        if ("gratis".equalsIgnoreCase(ev.getTipeHarga()) || "free".equalsIgnoreCase(ev.getTipeHarga())) {
             TiketGratis tg = new TiketGratis();
             tg.setPendaftaranId(p.getId());
             tg.setKodeQr("QR-" + kode);

@@ -1,9 +1,9 @@
 package com.example.eventhub2;
 
-/**
- * TiketGratis adalah turunan dari Tiket (inheritance).
- * Tiket langsung aktif tanpa pembayaran.
- */
+import jakarta.persistence.*;
+
+@Entity
+@DiscriminatorValue("GRATIS")
 public class TiketGratis extends Tiket {
 
     public TiketGratis() {

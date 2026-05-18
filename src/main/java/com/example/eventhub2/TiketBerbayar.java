@@ -1,11 +1,12 @@
 package com.example.eventhub2;
 
-/**
- * TiketBerbayar adalah turunan dari Tiket (inheritance).
- * Memerlukan verifikasi pembayaran sebelum aktif.
- */
+import jakarta.persistence.*;
+
+@Entity
+@DiscriminatorValue("BERBAYAR")
 public class TiketBerbayar extends Tiket {
 
+    @Column(name = "status_pembayaran")
     private String statusPembayaran;
 
     public TiketBerbayar() {

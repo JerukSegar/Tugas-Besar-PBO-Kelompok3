@@ -34,6 +34,8 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
 .content{padding:24px 28px;}
 .checkin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
 @media(max-width:700px){.checkin-grid{grid-template-columns:1fr;}}
+
+/* CARD */
 .checkin-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--gray-200);box-shadow:var(--shadow-sm);overflow:hidden;transition:box-shadow 0.2s;}
 .checkin-card:hover{box-shadow:var(--shadow-md);}
 .checkin-card-header{padding:16px 18px;border-bottom:1px solid var(--gray-100);display:flex;gap:12px;align-items:flex-start;}
@@ -47,6 +49,20 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
 .status-belum{background:var(--danger-light);color:#991b1b;}
 .status-aktif{background:var(--primary-light);color:var(--primary-dark);}
 .status-belum-waktu{background:#fef3c7;color:#92400e;}
+
+/* PROGRESS BAR */
+.progress-wrap{margin-top:10px;}
+.progress-label{font-size:10px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px;display:flex;justify-content:space-between;}
+.progress-bar{height:5px;background:var(--gray-200);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+.fill-blue{background:var(--primary);}
+.fill-green{background:var(--success);}
+.fill-warn{background:var(--warning);}
+
+/* COUNTDOWN BADGE */
+.countdown-badge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:4px 10px;background:#fef3c7;border:1px solid #fde68a;border-radius:20px;font-size:11px;font-weight:700;color:#92400e;}
+
+/* FOOTER */
 .checkin-footer{padding:14px 18px;background:var(--gray-50);display:flex;align-items:center;justify-content:space-between;}
 .kode-wrap{display:flex;flex-direction:column;gap:2px;}
 .kode-label{font-size:10px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;}
@@ -56,22 +72,50 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
 .btn-checkin:disabled{background:var(--gray-300);cursor:not-allowed;}
 .btn-sudah{padding:8px 18px;background:var(--success-light);color:#065f46;border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:default;}
 .btn-belum-waktu{padding:8px 18px;background:var(--gray-100);color:var(--gray-400);border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:not-allowed;border:1.5px solid var(--gray-200);}
-.countdown-wrap{margin-top:6px;font-size:11px;color:var(--gray-400);display:flex;align-items:center;gap:4px;}
-.countdown-wrap strong{color:var(--warning);font-weight:700;}
+
+/* EXPAND DETAIL */
+.checkin-expand-btn{width:100%;padding:8px;background:none;border:none;border-top:1px dashed var(--gray-200);font-size:11px;color:var(--gray-400);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;font-family:var(--font);transition:background 0.15s;}
+.checkin-expand-btn:hover{background:var(--gray-50);color:var(--gray-600);}
+.checkin-detail-panel{padding:0 18px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease;}
+.checkin-detail-panel.open{max-height:200px;padding:12px 18px;}
+.detail-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:4px 0;border-bottom:1px solid var(--gray-100);}
+.detail-row:last-child{border-bottom:none;}
+.detail-row span:first-child{color:var(--gray-400);font-weight:600;}
+.detail-row span:last-child{font-weight:600;color:var(--gray-700);}
+
+/* EMPTY */
 .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--gray-400);}
 .empty-state svg{width:48px;height:48px;margin-bottom:14px;opacity:0.3;}
 .empty-state h3{font-size:16px;font-weight:600;color:var(--gray-600);margin-bottom:6px;}
+
+/* MODAL KONFIRMASI */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,0.2);text-align:center;padding:32px 28px;}
-.modal-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;}
-.modal-icon.success{background:var(--success-light);}
+.modal-overlay.open{display:flex;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:400px;box-shadow:0 20px 50px rgba(0,0,0,0.2);overflow:hidden;}
+.modal-header{padding:28px 24px 0;text-align:center;}
+.modal-icon{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
+.modal-icon.confirm{background:var(--primary-light);}
+.modal-icon.success{background:var(--success-light);animation:popBounce 0.4s ease;}
 .modal-icon.error{background:var(--danger-light);}
 .modal-icon svg{width:32px;height:32px;}
-.modal-title{font-size:18px;font-weight:700;margin-bottom:8px;}
-.modal-msg{font-size:14px;color:var(--gray-500);margin-bottom:24px;}
-.modal-btn{padding:11px 32px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;}
-.modal-btn:hover{background:var(--primary-dark);}
+@keyframes popBounce{0%{transform:scale(0.5);opacity:0;}70%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
+.modal-title{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--gray-800);}
+.modal-msg{font-size:13px;color:var(--gray-500);line-height:1.5;padding:0 8px;}
+.modal-detail{margin:14px 24px 0;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:10px 14px;display:flex;flex-direction:column;gap:6px;}
+.modal-detail-row{display:flex;justify-content:space-between;font-size:12px;}
+.modal-detail-row span:first-child{color:var(--gray-400);font-weight:600;}
+.modal-detail-row span:last-child{font-weight:700;color:var(--gray-700);}
+.modal-footer{padding:16px 24px 20px;display:flex;gap:10px;}
+.modal-footer.center{justify-content:center;padding-top:20px;}
+.btn-modal-batal{flex:1;padding:11px;background:var(--gray-100);color:var(--gray-600);border-radius:var(--radius-sm);font-size:13px;font-weight:600;}
+.btn-modal-batal:hover{background:var(--gray-200);}
+.btn-modal-ok{flex:1;padding:11px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:700;}
+.btn-modal-ok:hover{background:var(--primary-dark);}
+.btn-modal-ok.success{background:var(--success);}
+.btn-modal-ok.danger{background:var(--danger);}
+
+/* TOAST */
 .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px;}
 .toast{padding:12px 18px;background:var(--gray-800);color:white;border-radius:var(--radius);font-size:13px;font-weight:500;box-shadow:var(--shadow-md);animation:slideIn 0.3s ease;}
 .toast.success{background:#065f46;}
@@ -94,7 +138,6 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
     <a class="nav-item" href="tiket_saya.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2z"/></svg>Tiket Saya</a>
     <a class="nav-item active" href="checkin_saya.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Check-In</a>
     <a class="nav-item hidden" href="laporan.html" id="navLaporan"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Laporan</a>
-    <a class="nav-item hidden" href="broadcast.html" id="navBroadcast"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM20.4 5.6c-.4-.53-.8-1.07-1.2-1.6-.99.74-2.24 1.68-3.2 2.4.4.53.8 1.07 1.2 1.6.96-.72 2.21-1.65 3.2-2.4zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1v4h2v-4h1l5 3V6L8 9H4zm11.5 3c0-1.33-.58-2.53-1.5-3.35v6.69c.92-.81 1.5-2.01 1.5-3.34z"/></svg>Broadcast</a>
     <a class="nav-item" href="pengaturan.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Pengaturan</a>
   </nav>
   <div class="sidebar-footer">
@@ -116,15 +159,37 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
   </div>
 </main>
 
-<!-- Modal hasil check-in -->
-<div class="modal-overlay" id="modalOverlay">
+<!-- Modal Konfirmasi Check-In -->
+<div class="modal-overlay" id="modalKonfirm">
   <div class="modal">
-    <div class="modal-icon" id="modalIcon">
-      <svg viewBox="0 0 24 24" fill="#10b981" id="modalIconSvg"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    <div class="modal-header">
+      <div class="modal-icon confirm">
+        <svg viewBox="0 0 24 24" fill="#1a56db"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      </div>
+      <div class="modal-title">Konfirmasi Check-In</div>
+      <div class="modal-msg">Pastikan kamu berada di lokasi event sebelum melakukan check-in.</div>
     </div>
-    <div class="modal-title" id="modalTitle">Check-In Berhasil!</div>
-    <div class="modal-msg" id="modalMsg">Kehadiran kamu sudah tercatat.</div>
-    <button class="modal-btn" onclick="tutupModal()">Oke</button>
+    <div class="modal-detail" id="konfirmDetail"></div>
+    <div class="modal-footer">
+      <button class="btn-modal-batal" onclick="tutupKonfirm()">Batal</button>
+      <button class="btn-modal-ok" onclick="lanjutCheckin()">&#10003; Ya, Check-In Sekarang</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Hasil Check-In -->
+<div class="modal-overlay" id="modalHasil">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-icon" id="hasilIcon">
+        <svg viewBox="0 0 24 24" id="hasilIconSvg" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      </div>
+      <div class="modal-title" id="hasilTitle">Check-In Berhasil!</div>
+      <div class="modal-msg" id="hasilMsg">Kehadiran kamu sudah tercatat.</div>
+    </div>
+    <div class="modal-footer center">
+      <button class="btn-modal-ok" id="hasilBtn" onclick="tutupHasil()">Oke</button>
+    </div>
   </div>
 </div>
 
@@ -139,41 +204,25 @@ var idUser    = localStorage.getItem('idUser');
 
 if (roleUser === 'penyelenggara') { window.location.href = 'laporan.html'; }
 
-// ===== SIDEBAR ROLE =====
-(function() {
-  var el;
-  el = document.getElementById('sidebarName');   if(el) el.textContent = namaUser;
-  el = document.getElementById('sidebarRole');   if(el) el.textContent = roleUser.charAt(0).toUpperCase() + roleUser.slice(1);
-  el = document.getElementById('sidebarAvatar'); if(el) el.textContent = namaUser.charAt(0).toUpperCase();
-  var navLaporan    = document.getElementById('navLaporan');
-  var navBroadcast  = document.getElementById('navBroadcast');
-  if (roleUser === 'penyelenggara') {
-    if(navLaporan)    navLaporan.classList.remove('hidden');
-    if(navBroadcast)  navBroadcast.classList.remove('hidden');
-  } else {
-    if(navLaporan)    navLaporan.classList.add('hidden');
-    if(navBroadcast)  navBroadcast.classList.add('hidden');
-  }
-})();
-document.getElementById('sidebarName').textContent  = namaUser;
+document.getElementById('sidebarName').textContent   = namaUser;
+document.getElementById('sidebarRole').textContent   = roleUser.charAt(0).toUpperCase() + roleUser.slice(1);
 document.getElementById('sidebarAvatar').textContent = namaUser.charAt(0).toUpperCase();
+
+var navLaporan = document.getElementById('navLaporan');
+if (roleUser === 'penyelenggara') { if(navLaporan) navLaporan.classList.remove('hidden'); }
+else { if(navLaporan) navLaporan.classList.add('hidden'); }
+
+var pendingKodeQr = null;
 
 function barColor(k) {
   return {seminar:'#3b82f6',workshop:'#10b981',konferensi:'#8b5cf6',webinar:'#f59e0b',bootcamp:'#ef4444'}[k] || '#94a3b8';
 }
 
-// ===== PARSE WAKTU MULAI EVENT =====
-// Format tanggal: "18 Apr 2026" atau "2026-04-18"
-// Format waktu:   "08.00-17.00 WIB" atau "08.07–09.00 WIB"
 function parseEventStart(tanggal, waktu) {
   try {
     var tgl = (tanggal || '').trim();
     var dateObj;
-    var bulanMap = {
-      jan:0,feb:1,mar:2,apr:3,mei:4,jun:5,
-      jul:6,agu:7,sep:8,okt:9,nov:10,des:11,
-      may:4,aug:7,oct:9,dec:11
-    };
+    var bulanMap = {jan:0,feb:1,mar:2,apr:3,mei:4,jun:5,jul:6,agu:7,sep:8,okt:9,nov:10,des:11,may:4,aug:7,oct:9,dec:11};
     var m1 = tgl.match(/^(\d{1,2})\s+([a-zA-Z]+)\s+(\d{4})$/);
     if (m1) {
       var bln = bulanMap[m1[2].toLowerCase().slice(0,3)];
@@ -182,18 +231,14 @@ function parseEventStart(tanggal, waktu) {
       dateObj = new Date(tgl);
     }
     if (!dateObj || isNaN(dateObj.getTime())) return null;
-
     if (waktu) {
-      // Hapus " WIB" dst, ambil bagian waktu mulai (sebelum strip/dash)
       var wStr = waktu.trim().replace(/\s*WIB.*/i, '');
       var jamMenitStr = wStr.split(/[-\u2013]/)[0].trim();
       var parts = jamMenitStr.split(/[.:]/);
       dateObj.setHours(parseInt(parts[0]) || 0, parseInt(parts[1]) || 0, 0, 0);
     }
     return dateObj;
-  } catch(e) {
-    return null;
-  }
+  } catch(e) { return null; }
 }
 
 function formatCountdown(ms) {
@@ -207,64 +252,54 @@ function formatCountdown(ms) {
   return m + ' menit lagi';
 }
 
-// ===== LOAD DATA =====
 function loadCheckin() {
   fetch('/api/events/saya/' + idUser)
     .then(function(r) { return r.json(); })
-    .then(function(pendaftaranList) {
-      if (!pendaftaranList.length) {
+    .then(function(list) {
+      if (!list.length) {
         document.getElementById('checkinGrid').innerHTML =
-          '<div class="empty-state">' +
-          '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' +
-          '<h3>Belum ada event</h3><p>Daftar event terlebih dahulu</p></div>';
+          '<div class="empty-state"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><h3>Belum ada event</h3><p>Daftar event terlebih dahulu</p></div>';
         return;
       }
-
-      var promises = pendaftaranList.map(function(p) {
-        return fetch('/api/tiket/pendaftaran/' + p.pendaftaranId)
+      var promises = list.map(function(p) {
+        var pid = p.pendaftaranId || p.id;
+        return fetch('/api/tiket/pendaftaran/' + pid)
           .then(function(r) { return r.json(); })
           .then(function(data) {
-            return { pendaftaran: p, tikets: data.tiket || [] };
+            var tikets = Array.isArray(data) ? data : (data.tiket || data.tikets || []);
+            return { pendaftaran: p, tikets: tikets };
           })
-          .catch(function() {
-            return { pendaftaran: p, tikets: [] };
-          });
+          .catch(function() { return { pendaftaran: p, tikets: [] }; });
       });
-
-      Promise.all(promises).then(function(results) {
-        renderCards(results);
-      });
+      Promise.all(promises).then(function(results) { renderCards(results); });
     })
     .catch(function() {
-      document.getElementById('checkinGrid').innerHTML =
-        '<div class="empty-state"><h3>Gagal memuat data</h3></div>';
+      document.getElementById('checkinGrid').innerHTML = '<div class="empty-state"><h3>Gagal memuat data</h3></div>';
     });
 }
 
-// ===== RENDER CARDS =====
 function renderCards(results) {
   var grid = document.getElementById('checkinGrid');
   if (!results.length) {
     grid.innerHTML = '<div class="empty-state"><h3>Belum ada event terdaftar</h3></div>';
     return;
   }
-
   var now = new Date();
-
-  grid.innerHTML = results.map(function(item) {
-    var p      = item.pendaftaran;
-    var tikets = item.tikets;
-    var tiket  = tikets.length > 0 ? tikets[0] : null;
+  grid.innerHTML = results.map(function(item, idx) {
+    var p          = item.pendaftaran;
+    var tikets     = item.tikets;
+    var tiket      = tikets.length > 0 ? tikets[0] : null;
     var sudahHadir = tiket && tiket.statusTiket === 'digunakan';
-    var color  = barColor(p.kategori);
+    var color      = barColor(p.kategori);
+    var cardId     = 'card' + idx;
 
-    // --- Cek waktu ---
     var eventStart    = parseEventStart(p.tanggal, p.waktu);
     var sudahWaktunya = !eventStart || now >= eventStart;
     var selisihMs     = eventStart ? (eventStart - now) : 0;
     var countdown     = (!sudahWaktunya && selisihMs > 0) ? formatCountdown(selisihMs) : '';
+    var kodeQr        = tiket ? tiket.kodeQr : (p.kodeTiket || '-');
 
-    // --- Status badge ---
+    // Status badge
     var statusHtml;
     if (sudahHadir) {
       statusHtml = '<span class="status-badge status-hadir">&#x2705; Sudah Hadir</span>';
@@ -276,54 +311,112 @@ function renderCards(results) {
       statusHtml = '<span class="status-badge status-aktif">Belum Check-In</span>';
     }
 
-    // --- Info countdown ---
+    // Countdown badge
     var countdownHtml = countdown
-      ? '<div class="countdown-wrap">&#128336; Dibuka dalam <strong>' + countdown + '</strong></div>'
+      ? '<div class="countdown-badge">&#128336; Dibuka dalam <strong>' + countdown + '</strong></div>'
       : '';
 
-    // --- Tombol aksi ---
+    // Progress bar
+    var progressHtml = '';
+    if (p.kapasitas) {
+      var terisi = p.terisi || 0;
+      var pct = Math.min(100, Math.round((terisi / p.kapasitas) * 100));
+      var fillClass = pct >= 90 ? 'fill-warn' : sudahHadir ? 'fill-green' : 'fill-blue';
+      progressHtml = '<div class="progress-wrap">'
+        + '<div class="progress-label"><span>Kapasitas</span><span>' + terisi + '/' + p.kapasitas + ' (' + pct + '%)</span></div>'
+        + '<div class="progress-bar"><div class="progress-fill ' + fillClass + '" style="width:' + pct + '%;"></div></div>'
+        + '</div>';
+    }
+
+    // Tombol aksi
     var btnHtml;
     if (sudahHadir) {
-      btnHtml = '<button class="btn-sudah" disabled>&#x2705; Sudah Hadir</button>';
+      btnHtml = '<button class="btn-sudah">&#x2705; Sudah Hadir</button>';
     } else if (!tiket) {
       btnHtml = '<button class="btn-checkin" disabled>Tidak ada tiket</button>';
     } else if (!sudahWaktunya) {
-      btnHtml = '<button class="btn-belum-waktu" disabled title="Check-In akan dibuka saat event dimulai">&#128274; Belum Dibuka</button>';
+      btnHtml = '<button class="btn-belum-waktu" disabled>&#128274; Belum Dibuka</button>';
     } else {
-      btnHtml = '<button class="btn-checkin" onclick="doCheckin(\'' + tiket.kodeQr + '\')">Check-In Sekarang</button>';
+      var namaEsc   = (p.nama || '').replace(/'/g, "\\'");
+      var tanggalEsc = (p.tanggal || '').replace(/'/g, "\\'");
+      var lokasiEsc = (p.lokasi || '').replace(/'/g, "\\'");
+      var qrEsc     = kodeQr.replace(/'/g, "\\'");
+      btnHtml = '<button class="btn-checkin" onclick="bukaKonfirm(\'' + qrEsc + '\',\'' + namaEsc + '\',\'' + tanggalEsc + '\',\'' + lokasiEsc + '\')">Check-In Sekarang</button>';
     }
 
-    var kodeQr = tiket ? tiket.kodeQr : p.kodeTiket;
+    // Detail panel
+    var tipeLabel = (p.tipeHarga === 'free' || p.tipeHarga === 'gratis') ? '&#127869; Gratis' : '&#128179; Berbayar';
+    var statusLabel = sudahHadir ? '&#x2705; Sudah Hadir' : sudahWaktunya ? '&#x1F7E1; Belum Check-In' : '&#x23F3; Belum Dimulai';
 
-    return '<div class="checkin-card">' +
-      '<div class="checkin-card-header">' +
-        '<div class="checkin-color" style="background:' + color + ';"></div>' +
-        '<div class="checkin-info">' +
-          '<div class="checkin-event-name">' + (p.nama || '-') + '</div>' +
-          '<div class="checkin-meta">' +
-            '<span>&#128197; ' + (p.tanggal || '-') + ' &middot; ' + (p.waktu || '') + '</span>' +
-            '<span>&#128205; ' + (p.venue || '') + ', ' + (p.lokasi || '-') + '</span>' +
-          '</div>' +
-          countdownHtml +
-        '</div>' +
-        '<div class="checkin-status">' + statusHtml + '</div>' +
-      '</div>' +
-      '<div class="checkin-footer">' +
-        '<div class="kode-wrap">' +
-          '<div class="kode-label">Kode QR Tiket</div>' +
-          '<div class="kode-val">' + kodeQr + '</div>' +
-        '</div>' +
-        btnHtml +
-      '</div>' +
-    '</div>';
+    return '<div class="checkin-card" id="' + cardId + '">'
+      + '<div class="checkin-card-header">'
+        + '<div class="checkin-color" style="background:' + color + ';"></div>'
+        + '<div class="checkin-info">'
+          + '<div class="checkin-event-name">' + (p.nama || '-') + '</div>'
+          + '<div class="checkin-meta">'
+            + '<span>&#128197; ' + (p.tanggal || '-') + ' &middot; ' + (p.waktu || '') + '</span>'
+            + '<span>&#128205; ' + (p.venue ? p.venue + ', ' : '') + (p.lokasi || '-') + '</span>'
+          + '</div>'
+          + countdownHtml
+          + progressHtml
+        + '</div>'
+        + '<div class="checkin-status">' + statusHtml + '</div>'
+      + '</div>'
+      + '<div class="checkin-footer">'
+        + '<div class="kode-wrap">'
+          + '<div class="kode-label">Kode QR Tiket</div>'
+          + '<div class="kode-val">' + kodeQr + '</div>'
+        + '</div>'
+        + btnHtml
+      + '</div>'
+      + '<button class="checkin-expand-btn" onclick="toggleDetail(\'' + cardId + '\')">&#9660; Lihat Detail Event</button>'
+      + '<div class="checkin-detail-panel" id="dp' + cardId + '">'
+        + '<div class="detail-row"><span>Penyelenggara</span><span>' + (p.penyelenggara || '-') + '</span></div>'
+        + '<div class="detail-row"><span>Kategori</span><span>' + (p.kategori ? p.kategori.charAt(0).toUpperCase()+p.kategori.slice(1) : '-') + '</span></div>'
+        + '<div class="detail-row"><span>Tipe Tiket</span><span>' + tipeLabel + '</span></div>'
+        + '<div class="detail-row"><span>Status</span><span>' + statusLabel + '</span></div>'
+      + '</div>'
+    + '</div>';
   }).join('');
 
-  // Auto-refresh tiap 30 detik agar countdown & status update otomatis
   if (window._checkinTimer) clearTimeout(window._checkinTimer);
   window._checkinTimer = setTimeout(function() { loadCheckin(); }, 30000);
 }
 
-// ===== CHECK-IN =====
+function toggleDetail(cardId) {
+  var panel = document.getElementById('dp' + cardId);
+  var btn   = document.querySelector('#' + cardId + ' .checkin-expand-btn');
+  if (panel.classList.contains('open')) {
+    panel.classList.remove('open');
+    btn.innerHTML = '&#9660; Lihat Detail Event';
+  } else {
+    panel.classList.add('open');
+    btn.innerHTML = '&#9650; Sembunyikan Detail';
+  }
+}
+
+function bukaKonfirm(kodeQr, namaEvent, tanggal, lokasi) {
+  pendingKodeQr = kodeQr;
+  document.getElementById('konfirmDetail').innerHTML =
+    '<div class="modal-detail-row"><span>Event</span><span>' + namaEvent + '</span></div>'
+    + '<div class="modal-detail-row"><span>Tanggal</span><span>' + tanggal + '</span></div>'
+    + '<div class="modal-detail-row"><span>Lokasi</span><span>' + lokasi + '</span></div>'
+    + '<div class="modal-detail-row"><span>Peserta</span><span>' + namaUser + '</span></div>';
+  document.getElementById('modalKonfirm').classList.add('open');
+}
+
+function tutupKonfirm() {
+  document.getElementById('modalKonfirm').classList.remove('open');
+  pendingKodeQr = null;
+}
+
+function lanjutCheckin() {
+  if (!pendingKodeQr) return;
+  var kode = pendingKodeQr;
+  tutupKonfirm();
+  doCheckin(kode);
+}
+
 function doCheckin(kodeQr) {
   fetch('/api/tiket/checkin', {
     method: 'POST',
@@ -333,52 +426,41 @@ function doCheckin(kodeQr) {
   .then(function(r) { return r.json(); })
   .then(function(data) {
     if (data.success) {
-      tampilModal(true, 'Check-In Berhasil!', 'Kehadiran kamu sudah tercatat. Selamat menikmati event!');
+      tampilHasil(true, 'Check-In Berhasil! &#x1F389;', 'Kehadiran kamu sudah tercatat. Selamat menikmati event!');
       loadCheckin();
     } else {
-      tampilModal(false, 'Check-In Gagal', data.message || 'Terjadi kesalahan.');
+      tampilHasil(false, 'Check-In Gagal', data.message || 'Terjadi kesalahan.');
     }
   })
   .catch(function() {
-    tampilModal(false, 'Koneksi Gagal', 'Tidak bisa konek ke server. Coba lagi.');
+    tampilHasil(false, 'Koneksi Gagal', 'Tidak bisa konek ke server. Coba lagi.');
   });
 }
 
-function tampilModal(sukses, judul, pesan) {
-  document.getElementById('modalTitle').textContent = judul;
-  document.getElementById('modalMsg').textContent   = pesan;
-  var icon = document.getElementById('modalIcon');
-  var svg  = document.getElementById('modalIconSvg');
+function tampilHasil(sukses, judul, pesan) {
+  document.getElementById('hasilTitle').innerHTML = judul;
+  document.getElementById('hasilMsg').textContent  = pesan;
+  var icon = document.getElementById('hasilIcon');
+  var svg  = document.getElementById('hasilIconSvg');
   if (sukses) {
     icon.className = 'modal-icon success';
     svg.setAttribute('fill', '#10b981');
     svg.innerHTML = '<path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>';
+    document.getElementById('hasilBtn').className = 'btn-modal-ok success';
   } else {
     icon.className = 'modal-icon error';
     svg.setAttribute('fill', '#ef4444');
     svg.innerHTML = '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>';
+    document.getElementById('hasilBtn').className = 'btn-modal-ok danger';
   }
-  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalHasil').classList.add('open');
 }
 
-function tutupModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
+function tutupHasil() {
+  document.getElementById('modalHasil').classList.remove('open');
 }
 
 function logout() { localStorage.clear(); window.location.href = 'login.html'; }
-
-function showToast(msg, type) {
-  type = type || 'info';
-  var wrap = document.getElementById('toast-wrap');
-  var t = document.createElement('div');
-  t.className = 'toast ' + type;
-  t.textContent = msg;
-  wrap.appendChild(t);
-  setTimeout(function() {
-    t.style.opacity = '0'; t.style.transition = 'opacity 0.3s';
-    setTimeout(function() { t.remove(); }, 300);
-  }, 3000);
-}
 
 loadCheckin();
 </script>

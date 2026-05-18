@@ -89,6 +89,32 @@ td.td-code{font-family:monospace;font-size:12px;color:var(--gray-400);font-weigh
 .toast.success{background:#065f46;}
 .toast.error{background:#991b1b;}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:none;}}
+.modal-tiket-detail{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:480px;box-shadow:0 20px 50px rgba(0,0,0,0.2);overflow:hidden;}
+.mtd-top{background:linear-gradient(135deg,#0f2044 0%,#1a56db 100%);padding:24px 24px 20px;position:relative;color:white;}
+.mtd-brand{font-size:11px;font-weight:700;letter-spacing:0.1em;opacity:0.7;margin-bottom:6px;}
+.mtd-event{font-size:18px;font-weight:800;margin-bottom:4px;}
+.mtd-org{font-size:12px;opacity:0.7;}
+.mtd-close{position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,0.15);border:none;cursor:pointer;color:white;font-size:18px;display:flex;align-items:center;justify-content:center;line-height:1;}
+.mtd-close:hover{background:rgba(255,255,255,0.25);}
+.mtd-divider{height:2px;background:repeating-linear-gradient(90deg,var(--gray-200) 0,var(--gray-200) 8px,transparent 8px,transparent 14px);}
+.mtd-body{padding:20px 24px;}
+.mtd-section{margin-bottom:16px;}
+.mtd-section-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--gray-400);margin-bottom:10px;}
+.mtd-rows{display:flex;flex-direction:column;gap:8px;}
+.mtd-row{display:flex;justify-content:space-between;align-items:center;font-size:13px;}
+.mtd-row span:first-child{color:var(--gray-500);}
+.mtd-row span:last-child{font-weight:600;color:var(--gray-800);}
+.mtd-qr-wrap{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius);margin-bottom:16px;}
+.mtd-qr-box{background:white;padding:10px;border-radius:8px;border:1px solid var(--gray-200);}
+.mtd-kode{text-align:center;}
+.mtd-kode-label{font-size:10px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.mtd-kode-val{font-family:monospace;font-size:14px;font-weight:800;color:var(--gray-800);letter-spacing:0.08em;}
+.mtd-status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;}
+.mtd-footer{padding:14px 24px 20px;display:flex;gap:10px;}
+.btn-mtd-tutup{flex:1;padding:11px;background:var(--gray-100);color:var(--gray-600);border-radius:var(--radius-sm);font-size:13px;font-weight:600;border:none;cursor:pointer;}
+.btn-mtd-tutup:hover{background:var(--gray-200);}
+.btn-mtd-tiket{flex:1;padding:11px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:700;border:none;cursor:pointer;}
+.btn-mtd-tiket:hover{background:var(--primary-dark);}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:520px;box-shadow:0 20px 50px rgba(0,0,0,0.15);}
@@ -175,7 +201,6 @@ td.td-code{font-family:monospace;font-size:12px;color:var(--gray-400);font-weigh
     <a class="nav-item" href="tiket_saya.html" id="navTiket"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2z"/></svg>Tiket Saya</a>
     <a class="nav-item" href="checkin_saya.html" id="navCheckin"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Check-In</a>
     <a class="nav-item hidden" href="laporan.html" id="navLaporan"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>Laporan</a>
-    <a class="nav-item hidden" href="broadcast.html" id="navBroadcast"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM20.4 5.6c-.4-.53-.8-1.07-1.2-1.6-.99.74-2.24 1.68-3.2 2.4.4.53.8 1.07 1.2 1.6.96-.72 2.21-1.65 3.2-2.4zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1v4h2v-4h1l5 3V6L8 9H4zm11.5 3c0-1.33-.58-2.53-1.5-3.35v6.69c.92-.81 1.5-2.01 1.5-3.34z"/></svg>Broadcast</a>
     <a class="nav-item" href="pengaturan.html"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Pengaturan</a>
   </nav>
   <div class="sidebar-footer">
@@ -213,6 +238,7 @@ td.td-code{font-family:monospace;font-size:12px;color:var(--gray-400);font-weigh
   </div>
 </main>
 
+<!-- Modal Buat/Edit Event -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal">
     <div class="modal-header">
@@ -311,6 +337,7 @@ td.td-code{font-family:monospace;font-size:12px;color:var(--gray-400);font-weigh
   </div>
 </div>
 
+<!-- Time Picker -->
 <div class="tp-overlay" id="tp-overlay" onclick="if(event.target===this)closeTimePicker()">
   <div class="tp-sheet">
     <div class="tp-header">
@@ -335,6 +362,7 @@ td.td-code{font-family:monospace;font-size:12px;color:var(--gray-400);font-weigh
   </div>
 </div>
 
+<!-- Date Picker -->
 <div class="dp-overlay" id="dp-overlay" onclick="dpOverlayClick(event)">
   <div class="dp-sheet">
     <div class="dp-header">
@@ -359,6 +387,52 @@ td.td-code{font-family:monospace;font-size:12px;color:var(--gray-400);font-weigh
   </div>
 </div>
 
+<!-- Modal Detail Tiket -->
+<div class="modal-overlay" id="modalDetailTiket">
+  <div class="modal-tiket-detail">
+    <div class="mtd-top">
+      <div class="mtd-brand">&#127869; EVENTHUB — TIKET RESMI</div>
+      <div class="mtd-event" id="mtdNamaEvent">-</div>
+      <div class="mtd-org" id="mtdOrg">-</div>
+      <button class="mtd-close" onclick="tutupDetailTiket()">&#x00D7;</button>
+    </div>
+    <div class="mtd-divider"></div>
+    <div class="mtd-body">
+      <div class="mtd-qr-wrap">
+        <div class="mtd-qr-box">
+          <canvas id="mtdQrCanvas" width="140" height="140"></canvas>
+        </div>
+        <div class="mtd-kode">
+          <div class="mtd-kode-label">Kode QR Tiket</div>
+          <div class="mtd-kode-val" id="mtdKodeQr">-</div>
+        </div>
+      </div>
+      <div class="mtd-section">
+        <div class="mtd-section-title">&#128197; Info Event</div>
+        <div class="mtd-rows">
+          <div class="mtd-row"><span>Tanggal</span><span id="mtdTanggal">-</span></div>
+          <div class="mtd-row"><span>Waktu</span><span id="mtdWaktu">-</span></div>
+          <div class="mtd-row"><span>Lokasi</span><span id="mtdLokasi">-</span></div>
+          <div class="mtd-row"><span>Penyelenggara</span><span id="mtdPenyelenggara">-</span></div>
+        </div>
+      </div>
+      <div class="mtd-section">
+        <div class="mtd-section-title">&#127869; Info Tiket</div>
+        <div class="mtd-rows">
+          <div class="mtd-row"><span>Kode Tiket</span><span id="mtdKodeTiket" style="font-family:monospace">-</span></div>
+          <div class="mtd-row"><span>Tipe</span><span id="mtdTipe">-</span></div>
+          <div class="mtd-row"><span>Atas Nama</span><span id="mtdNamaPeserta">-</span></div>
+          <div class="mtd-row"><span>Status</span><span id="mtdStatus">-</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mtd-footer">
+      <button class="btn-mtd-tutup" onclick="tutupDetailTiket()">Tutup</button>
+      <button class="btn-mtd-tiket" onclick="window.location.href='tiket_saya.html'">&#127869; Lihat Tiket Saya</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
@@ -376,6 +450,13 @@ let myData    = [];
 let activeTab = 'all';
 let editId    = null;
 
+// ============================================================
+// CACHE GLOBAL — menyimpan data event & status tiket
+// agar bisa diakses dari onclick tanpa passing JSON lewat HTML
+// ============================================================
+window._eventCache      = [];
+window._tiketStatusMap  = {};
+
 function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function thumbColor(k) { return ({seminar:'#dbeafe',workshop:'#d1fae5',konferensi:'#ede9fe',webinar:'#fef3c7',bootcamp:'#fee2e2'})[k] || '#f1f5f9'; }
 function thumbIcon(k)  { return ({seminar:'#3b82f6',workshop:'#10b981',konferensi:'#8b5cf6',webinar:'#f59e0b',bootcamp:'#ef4444'})[k]  || '#94a3b8'; }
@@ -384,7 +465,6 @@ if (roleUser === 'penyelenggara') {
   document.getElementById('navTiket').classList.add('hidden');
   document.getElementById('navCheckin').classList.add('hidden');
   document.getElementById('navLaporan').classList.remove('hidden');
-  document.getElementById('navBroadcast').classList.remove('hidden');
   document.getElementById('labelEventSaya').textContent = 'Event Dikelola';
   document.getElementById('pageTitle').textContent      = 'Event Dikelola';
   document.getElementById('pageDesc').textContent       = 'Event yang kamu buat dan kelola';
@@ -392,7 +472,6 @@ if (roleUser === 'penyelenggara') {
   loadEventPenyelenggara();
 } else {
   document.getElementById('navLaporan').classList.add('hidden');
-  document.getElementById('navBroadcast').classList.add('hidden');
   loadEventPeserta();
 }
 
@@ -429,20 +508,28 @@ async function renderPeserta() {
   const tbody = document.getElementById('table-body');
   let data = myData;
   if (activeTab !== 'all') data = data.filter(e => e.status === activeTab);
+
   if (!data.length) {
     tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><h3>Belum ada event</h3><p>Kamu belum mendaftar event apapun</p></div></td></tr>`;
     return;
   }
+
+  // Fetch status tiket untuk setiap event
   const tiketStatusMap = {};
   await Promise.all(data.map(async e => {
     try {
-      const res    = await fetch('/api/tiket/pendaftaran/' + e.pendaftaranId);
-      const json   = await res.json();
-      const tikets = json.tiket || [];
+      const res  = await fetch('/api/tiket/pendaftaran/' + e.pendaftaranId);
+      const json = await res.json();
+      const tikets = Array.isArray(json) ? json : (json.tiket || json.tikets || []);
       tiketStatusMap[e.pendaftaranId] = tikets.some(t => t.statusTiket === 'digunakan');
     } catch { tiketStatusMap[e.pendaftaranId] = false; }
   }));
-  tbody.innerHTML = data.map(e => {
+
+  // Simpan ke cache global — tombol Detail tinggal pakai index
+  window._eventCache     = data;
+  window._tiketStatusMap = tiketStatusMap;
+
+  tbody.innerHTML = data.map((e, idx) => {
     const sudahCheckIn = tiketStatusMap[e.pendaftaranId] === true;
     let aksiHtml = '';
     if (e.status === 'upcoming') {
@@ -459,13 +546,91 @@ async function renderPeserta() {
       <td class="td-muted">&#128205; ${e.lokasi||'-'}</td>
       <td><span class="event-tag tag-${e.kategori}">${cap(e.kategori||'lainnya')}</span></td>
       <td>${e.status==='upcoming'?'<span class="badge badge-upcoming">Akan Datang</span>':'<span class="badge badge-done">Selesai</span>'}</td>
-      <td class="td-code">${e.kodeTiket}</td>
+      <td class="td-code">${e.kodeTiket||'-'}</td>
       <td><div class="td-actions">
-        <button class="btn-sm btn-view" onclick="showToast('Kode tiket: ${e.kodeTiket}','success')">Detail</button>
+        <button class="btn-sm btn-view" onclick="bukaDetailTiket(${idx})">Detail</button>
         ${aksiHtml}
       </div></td>
     </tr>`;
   }).join('');
+}
+
+// ============================================================
+// bukaDetailTiket — terima index, ambil data dari cache global
+// ============================================================
+function bukaDetailTiket(idx) {
+  var e            = window._eventCache[idx];
+  var tiketStatusMap = window._tiketStatusMap;
+  if (!e) { showToast('Data event tidak ditemukan','error'); return; }
+  var sudahCheckIn = tiketStatusMap[e.pendaftaranId] === true;
+
+  document.getElementById('mtdNamaEvent').textContent     = e.nama || '-';
+  document.getElementById('mtdOrg').textContent           = e.penyelenggara || '-';
+  document.getElementById('mtdTanggal').textContent       = e.tanggal || '-';
+  document.getElementById('mtdWaktu').textContent         = e.waktu || '-';
+  document.getElementById('mtdLokasi').textContent        = (e.venue ? e.venue + ', ' : '') + (e.lokasi || '-');
+  document.getElementById('mtdPenyelenggara').textContent = e.penyelenggara || '-';
+  document.getElementById('mtdKodeTiket').textContent     = e.kodeTiket || '-';
+  document.getElementById('mtdNamaPeserta').textContent   = namaUser;
+  document.getElementById('mtdTipe').textContent          = (e.tipeHarga === 'free' || e.tipeHarga === 'gratis') ? '🎫 Gratis' : '💳 Berbayar';
+
+  var statusEl = document.getElementById('mtdStatus');
+  if (sudahCheckIn) {
+    statusEl.innerHTML = '<span class="mtd-status-badge" style="background:#d1fae5;color:#065f46;">✅ Sudah Check-In</span>';
+  } else if (e.status === 'upcoming') {
+    statusEl.innerHTML = '<span class="mtd-status-badge" style="background:#ebf1fd;color:#1341b3;">🔵 Akan Datang</span>';
+  } else {
+    statusEl.innerHTML = '<span class="mtd-status-badge" style="background:#f1f5f9;color:#475569;">⬜ Selesai</span>';
+  }
+
+  // Fetch kode QR dari API tiket
+  fetch('/api/tiket/pendaftaran/' + e.pendaftaranId)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var tikets = Array.isArray(data) ? data : (data.tiket || data.tikets || []);
+      var kodeQr = tikets.length > 0 ? (tikets[0].kodeQr || tikets[0].kode_qr || e.kodeTiket) : (e.kodeTiket || '-');
+      document.getElementById('mtdKodeQr').textContent = kodeQr;
+      generateQR(kodeQr, e.nama || '', namaUser);
+    })
+    .catch(function() {
+      var fallback = e.kodeTiket || '-';
+      document.getElementById('mtdKodeQr').textContent = fallback;
+      generateQR(fallback, e.nama || '', namaUser);
+    });
+
+  document.getElementById('modalDetailTiket').classList.add('open');
+}
+
+function generateQR(text, namaEvent, namaPeserta) {
+  var canvas = document.getElementById('mtdQrCanvas');
+  var ctx    = canvas.getContext('2d');
+  ctx.clearRect(0, 0, 140, 140);
+  var tempDiv = document.createElement('div');
+  tempDiv.style.display = 'none';
+  document.body.appendChild(tempDiv);
+  try {
+    new QRCode(tempDiv, {
+      text: text + '|' + namaEvent + '|' + namaPeserta,
+      width: 140, height: 140,
+      colorDark: '#0f2044', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    setTimeout(function() {
+      var img = tempDiv.querySelector('img') || tempDiv.querySelector('canvas');
+      if (img) {
+        var i = new Image();
+        i.onload = function() { ctx.drawImage(i, 0, 0, 140, 140); };
+        i.src = img.src || img.toDataURL();
+      }
+      if (document.body.contains(tempDiv)) document.body.removeChild(tempDiv);
+    }, 150);
+  } catch(err) {
+    if (document.body.contains(tempDiv)) document.body.removeChild(tempDiv);
+  }
+}
+
+function tutupDetailTiket() {
+  document.getElementById('modalDetailTiket').classList.remove('open');
 }
 
 function batalDaftar(eventId) {
@@ -477,10 +642,10 @@ function batalDaftar(eventId) {
   })
   .then(r => r.json())
   .then(data => {
-    showToast((data.success?'&#x2705; ':'&#x26A0;&#xFE0F; ')+data.message, data.success?'success':'error');
+    showToast((data.success ? '✅ ' : '⚠️ ') + data.message, data.success ? 'success' : 'error');
     if (data.success) loadEventPeserta();
   })
-  .catch(() => showToast('Gagal konek ke server!','error'));
+  .catch(() => showToast('Gagal konek ke server!', 'error'));
 }
 
 function loadEventPenyelenggara() {
@@ -489,8 +654,8 @@ function loadEventPenyelenggara() {
     .then(data => {
       myData = data;
       const total        = data.length;
-      const totalPeserta = data.reduce((a,b) => a+b.terisi, 0);
-      const totalKap     = data.reduce((a,b) => a+b.kapasitas, 0);
+      const totalPeserta = data.reduce((a, b) => a + b.terisi, 0);
+      const totalKap     = data.reduce((a, b) => a + b.kapasitas, 0);
       document.getElementById('statsArea').innerHTML = `
         <div class="stat-mini"><div class="stat-icon" style="background:#ebf1fd;"><svg viewBox="0 0 24 24" fill="#1a56db"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div><div><div class="stat-label">Event Dikelola</div><div class="stat-value">${total}</div></div></div>
         <div class="stat-mini"><div class="stat-icon" style="background:#d1fae5;"><svg viewBox="0 0 24 24" fill="#10b981"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div><div><div class="stat-label">Total Peserta</div><div class="stat-value">${totalPeserta}</div></div></div>
@@ -499,7 +664,7 @@ function loadEventPenyelenggara() {
       document.getElementById('tableHead').innerHTML = `<tr><th>Event</th><th>Tanggal</th><th>Lokasi</th><th>Kategori</th><th>Peserta</th><th>Harga</th><th>Aksi</th></tr>`;
       renderPenyelenggara();
     })
-    .catch(() => showToast('Gagal memuat data','error'));
+    .catch(() => showToast('Gagal memuat data', 'error'));
 }
 
 function setTabP(tab, el) {
@@ -590,10 +755,10 @@ function simpanEvent() {
     kapasitas: document.getElementById('inputKapasitas').value,
     createdBy: idUser
   };
-  if (!body.nama || !body.tanggal || !body.lokasi) { showToast('Nama, tanggal, dan lokasi wajib diisi!','error'); return; }
+  if (!body.nama || !body.tanggal || !body.lokasi) { showToast('Nama, tanggal, dan lokasi wajib diisi!', 'error'); return; }
   if (tipeHarga === 'paid') {
     const angka = parseInt(document.getElementById('inputHarga').value.replace(/[^0-9]/g,''));
-    if (!angka || angka < 1000) { showToast('Harga minimal Rp 1.000 untuk event berbayar!','error'); return; }
+    if (!angka || angka < 1000) { showToast('Harga minimal Rp 1.000 untuk event berbayar!', 'error'); return; }
     body.harga = 'Rp ' + angka.toLocaleString('id-ID');
   }
   const url    = editId ? `/api/events/${editId}` : '/api/events';
@@ -601,10 +766,10 @@ function simpanEvent() {
   fetch(url, {method, headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
     .then(r => r.json())
     .then(data => {
-      showToast(data.message, data.success?'success':'error');
+      showToast(data.message, data.success ? 'success' : 'error');
       if (data.success) { closeModal(); loadEventPenyelenggara(); }
     })
-    .catch(() => showToast('Gagal konek ke server!','error'));
+    .catch(() => showToast('Gagal konek ke server!', 'error'));
 }
 
 function hapusEvent(id) {
@@ -612,10 +777,10 @@ function hapusEvent(id) {
   fetch(`/api/events/${id}`, {method:'DELETE', headers:{'Content-Type':'application/json'}, body:JSON.stringify({createdBy:idUser})})
     .then(r => r.json())
     .then(data => {
-      showToast(data.message, data.success?'success':'error');
+      showToast(data.message, data.success ? 'success' : 'error');
       if (data.success) loadEventPenyelenggara();
     })
-    .catch(() => showToast('Gagal konek ke server!','error'));
+    .catch(() => showToast('Gagal konek ke server!', 'error'));
 }
 
 function closeModal(e) {
@@ -623,7 +788,7 @@ function closeModal(e) {
     document.getElementById('modal-overlay').classList.remove('open');
 }
 
-/* Date Picker */
+/* ======== Date Picker ======== */
 const BULAN = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 let dpSel = {hari:1, bulan:0, tahun:new Date().getFullYear()};
 
@@ -631,8 +796,7 @@ function buildDrum(innerId, items, selIdx) {
   const inner = document.getElementById(innerId);
   let html = '<div>&nbsp;</div><div>&nbsp;</div>';
   items.forEach((it,i) => html += `<div class="${i===selIdx?'sel':''}">${it}</div>`);
-  html += '<div>&nbsp;</div><div>&nbsp;</div>';
-  inner.innerHTML = html;
+  inner.innerHTML = html + '<div>&nbsp;</div><div>&nbsp;</div>';
   inner.style.transform = `translateY(${-selIdx*36}px)`;
 }
 
@@ -701,10 +865,10 @@ function attachDrumScroll(drumKey) {
   drum.addEventListener('wheel', e=>{e.preventDefault();snap(getT()-Math.sign(e.deltaY)*36);},{passive:false});
 }
 
-/* Time Picker */
-const HOURS=Array.from({length:24},(_,i)=>String(i).padStart(2,'0'));
-const MINUTES=Array.from({length:60},(_,i)=>String(i).padStart(2,'0'));
-let tpSel={startJam:8,startMenit:0,endJam:17,endMenit:0}, tpPhase='start';
+/* ======== Time Picker ======== */
+const HOURS   = Array.from({length:24},(_,i)=>String(i).padStart(2,'0'));
+const MINUTES = Array.from({length:60},(_,i)=>String(i).padStart(2,'0'));
+let tpSel = {startJam:8,startMenit:0,endJam:17,endMenit:0}, tpPhase = 'start';
 
 function buildTpDrum(innerId, items, selIdx) {
   const inner = document.getElementById(innerId);
@@ -717,7 +881,7 @@ function buildTpDrum(innerId, items, selIdx) {
 function updateTpPreview() {
   document.getElementById('tpPreview').textContent =
     String(tpSel.startJam).padStart(2,'0')+'.'+String(tpSel.startMenit).padStart(2,'0')+
-    ' \u2013 '+String(tpSel.endJam).padStart(2,'0')+'.'+String(tpSel.endMenit).padStart(2,'0')+' WIB';
+    ' – '+String(tpSel.endJam).padStart(2,'0')+'.'+String(tpSel.endMenit).padStart(2,'0')+' WIB';
 }
 
 function openTimePicker() {
@@ -741,7 +905,7 @@ function confirmTime() {
     return;
   }
   const val = String(tpSel.startJam).padStart(2,'0')+'.'+String(tpSel.startMenit).padStart(2,'0')+
-    '\u2013'+String(tpSel.endJam).padStart(2,'0')+'.'+String(tpSel.endMenit).padStart(2,'0')+' WIB';
+    '–'+String(tpSel.endJam).padStart(2,'0')+'.'+String(tpSel.endMenit).padStart(2,'0')+' WIB';
   document.getElementById('inputWaktu').value = val;
   const trig = document.getElementById('timeTriggerText');
   trig.textContent = val; trig.style.color = 'var(--gray-800)';
@@ -783,7 +947,7 @@ function attachTpScroll(drumId, key) {
   _tpH[drumId]={md,mm,mu,ts,tm,te,wh};
 }
 
-/* City Search */
+/* ======== City Search ======== */
 const KOTA_INDONESIA=['Ambon','Balikpapan','Banda Aceh','Bandar Lampung','Bandung','Banjarmasin','Banjarbaru','Batam','Batu','Bekasi','Bengkulu','Binjai','Bima','Bitung','Blitar','Bogor','Bontang','Bukittinggi','Cianjur','Cilegon','Cimahi','Cirebon','Denpasar','Depok','Dumai','Ende','Garut','Gorontalo','Jakarta Barat','Jakarta Pusat','Jakarta Selatan','Jakarta Timur','Jakarta Utara','Jambi','Jayapura','Jember','Jombang','Karawang','Kediri','Kendari','Klaten','Kudus','Kupang','Lamongan','Lhokseumawe','Lubuklinggau','Madiun','Magelang','Majalengka','Makassar','Malang','Manado','Manokwari','Mataram','Medan','Metro','Mojokerto','Ngawi','Padang','Padang Panjang','Palangka Raya','Palembang','Palu','Pangkalpinang','Parepare','Pasuruan','Pati','Pekalongan','Pekanbaru','Pematang Siantar','Pontianak','Prabumulih','Probolinggo','Purwokerto','Sabang','Salatiga','Samarinda','Semarang','Serang','Sibolga','Sidoarjo','Singkawang','Situbondo','Solok','Sorong','Subulussalam','Sukabumi','Surabaya','Surakarta','Tangerang','Tangerang Selatan','Tarakan','Tasikmalaya','Tebing Tinggi','Tegal','Ternate','Tidore Kepulauan','Tomohon','Tual','Tuban','Tulungagung','Yogyakarta'].sort();
 
 function filterKota(q) {
@@ -797,7 +961,7 @@ function filterKota(q) {
 function selectKota(nama){document.getElementById('inputLokasi').value=nama;closeCityDropdown();}
 function closeCityDropdown(){const dd=document.getElementById('cityDropdown');if(dd)dd.classList.remove('open');}
 
-/* Harga */
+/* ======== Harga ======== */
 function onTipeHargaChange() {
   const t=document.getElementById('inputTipeHarga').value;
   document.getElementById('groupHarga').style.display  = t==='paid'?'':'none';
@@ -820,11 +984,12 @@ function updateHargaPreview(num) {
 
 function logout(){localStorage.clear();window.location.href='login.html';}
 
-function showToast(msg,type='info'){
-  const wrap=document.getElementById('toast-wrap'),t=document.createElement('div');
+function showToast(msg, type='info'){
+  const wrap=document.getElementById('toast-wrap'), t=document.createElement('div');
   t.className='toast '+type; t.textContent=msg; wrap.appendChild(t);
   setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300);},3000);
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </body>
 </html>

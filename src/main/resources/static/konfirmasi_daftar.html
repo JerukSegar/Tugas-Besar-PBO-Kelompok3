@@ -399,7 +399,7 @@ function konfirmasiDaftar() {
       document.getElementById('suksesState').style.display = 'block';
       document.getElementById('kodeTiketBox').textContent = data.kodeTiket;
     } else {
-      showAlert('error', '⚠️ ' + data.message);
+      showAlert('error', '⚠️ ' + (data.message || 'Pendaftaran gagal, silakan coba lagi.'));
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Konfirmasi & Daftar Sekarang';
       btn.disabled = false;
     }

@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tiket")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipe_tiket", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("UMUM")
 public class Tiket {
 
     @Id

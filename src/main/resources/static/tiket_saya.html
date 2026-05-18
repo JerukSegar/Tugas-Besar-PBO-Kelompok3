@@ -79,6 +79,29 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
 .toast.success{background:#065f46;}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:none;}}
 .hidden{display:none!important;}
+/* ===== MODAL TIKET ===== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:300;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;animation:fadeIn 0.2s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-tiket{background:white;border-radius:16px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,0.25);overflow:hidden;}
+.modal-tiket-header{padding:20px 24px 16px;border-bottom:2px dashed var(--gray-200);position:relative;}
+.modal-tiket-brand{font-size:13px;font-weight:800;color:var(--primary);letter-spacing:0.05em;margin-bottom:4px;}
+.modal-tiket-event{font-size:17px;font-weight:800;color:var(--gray-800);line-height:1.3;margin-bottom:4px;}
+.modal-tiket-meta{font-size:12px;color:var(--gray-500);display:flex;flex-direction:column;gap:3px;}
+.modal-close{position:absolute;top:14px;right:14px;width:28px;height:28px;border-radius:50%;background:var(--gray-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--gray-500);font-size:18px;line-height:1;}
+.modal-close:hover{background:var(--gray-200);}
+.modal-tiket-body{padding:20px 24px;display:flex;flex-direction:column;align-items:center;gap:14px;}
+.qr-canvas-wrap{background:white;border:2px solid var(--gray-200);border-radius:12px;padding:14px;}
+.modal-kode{text-align:center;}
+.modal-kode-label{font-size:10px;color:var(--gray-400);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;}
+.modal-kode-val{font-family:monospace;font-size:15px;font-weight:800;color:var(--gray-800);letter-spacing:0.1em;}
+.modal-peserta{font-size:12px;color:var(--gray-500);text-align:center;}
+.modal-tiket-footer{padding:14px 24px;background:var(--gray-50);border-top:1px solid var(--gray-200);display:flex;gap:10px;}
+.btn-tutup{flex:1;padding:10px;background:var(--gray-200);color:var(--gray-700);border-radius:var(--radius-sm);font-size:13px;font-weight:600;border:none;cursor:pointer;}
+.btn-tutup:hover{background:var(--gray-300);}
+.btn-print{flex:1;padding:10px;background:var(--primary);color:white;border-radius:var(--radius-sm);font-size:13px;font-weight:600;border:none;cursor:pointer;}
+.btn-print:hover{background:var(--primary-dark);}
+
 </style>
 </head>
 <body>
@@ -118,6 +141,39 @@ button{cursor:pointer;font-family:var(--font);border:none;outline:none;}
     <div class="tiket-grid" id="tiket-grid"><div class="empty-state"><h3>Memuat tiket...</h3></div></div>
   </div>
 </main>
+
+<!-- Modal Tiket + QR -->
+<div class="modal-overlay" id="modalTiket">
+  <div class="modal-tiket">
+    <div class="modal-tiket-header">
+      <div class="modal-tiket-brand">🎫 EventHub</div>
+      <div class="modal-tiket-event" id="modalNamaEvent">-</div>
+      <div class="modal-tiket-meta">
+        <span id="modalTanggal">-</span>
+        <span id="modalLokasi">-</span>
+        <span id="modalPenyelenggara">-</span>
+      </div>
+      <button class="modal-close" onclick="tutupModal()">×</button>
+    </div>
+    <div class="modal-tiket-body">
+      <div class="qr-canvas-wrap">
+        <canvas id="qrCanvas" width="160" height="160"></canvas>
+      </div>
+      <div class="modal-kode">
+        <div class="modal-kode-label">Kode Tiket</div>
+        <div class="modal-kode-val" id="modalKodeTiket">-</div>
+      </div>
+      <div class="modal-peserta" id="modalPeserta">-</div>
+    </div>
+    <div class="modal-tiket-footer">
+      <button class="btn-tutup" onclick="tutupModal()">Tutup</button>
+      <button class="btn-print" onclick="printTiket()">🖨️ Cetak / Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 <div class="toast-wrap" id="toast-wrap"></div>
 
 <script>
@@ -189,11 +245,12 @@ function render() {
   const grid = document.getElementById('tiket-grid');
   let data = tickets;
   if (activeTab !== 'all') data = data.filter(t => t.status === activeTab);
+  window.filteredData = data;
   if (!data.length) {
     grid.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 10V6c0-1.11-.9-2-2-2H4c-1.1 0-1.99.89-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2z"/></svg><h3>Tidak ada tiket</h3><p>Belum ada tiket di kategori ini</p></div>`;
     return;
   }
-  grid.innerHTML = data.map(t => `
+  grid.innerHTML = data.map((t, idx) => `
     <div class="tiket-card">
       <div class="tiket-header">
         <div class="tiket-color-bar" style="background:${barColor(t.kategori)};"></div>
@@ -219,10 +276,10 @@ function render() {
             <div class="seat-label">Penyelenggara</div>
             <div class="seat-val" style="font-size:12px;">${t.penyelenggara || '-'}</div>
           </div>
-          <div class="qr-box">
+          <div class="qr-box" onclick="tampilkanTiket(filteredData[${idx}])" title="Lihat QR Code" style="cursor:pointer;">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11h2v2H3v-2zm8-6h2v4h-2V5zm-2 6h4v4h-2v-2H9v-2zm6 0h2v2h-2v-2zm2 4h-2v2h2v2h2v-4h-2zm-2 2h-2v2h2v-2zM3 3h8v8H3V3zm10 0h8v8h-8V3zm-10 10h8v8H3v-8zm2 2v4h4v-4H5zm10-12v4h4V3h-4z"/></svg>
           </div>
-          ${t.status === 'upcoming' ? `<button class="btn-download" onclick="showToast('✅ Tiket ${t.kodeTiket} diunduh!','success')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>Unduh</button>` : ''}
+          <button class="btn-download" onclick="tampilkanTiket(filteredData[${idx}])"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11h2v2H3v-2zm8-6h2v4h-2V5zm-2 6h4v4h-2v-2H9v-2zm6 0h2v2h-2v-2zm2 4h-2v2h2v2h2v-4h-2zm-2 2h-2v2h2v-2zM3 3h8v8H3V3zm10 0h8v8h-8V3zm-10 10h8v8H3v-8zm2 2v4h4v-4H5zm10-12v4h4V3h-4z"/></svg>Lihat Tiket</button>
         </div>
       </div>
     </div>`).join('');
@@ -238,6 +295,56 @@ function showToast(msg, type = 'info') {
 }
 
 function logout() { localStorage.clear(); window.location.href = 'login.html'; }
+
+
+function tampilkanTiket(t) {
+  document.getElementById('modalNamaEvent').textContent    = t.nama || '-';
+  document.getElementById('modalTanggal').textContent      = '📅 ' + (t.tanggal || '-') + ' · ' + (t.waktu || '');
+  document.getElementById('modalLokasi').textContent       = '📍 ' + (t.venue ? t.venue + ', ' : '') + (t.lokasi || '-');
+  document.getElementById('modalPenyelenggara').textContent= '🏢 ' + (t.penyelenggara || '-');
+  document.getElementById('modalKodeTiket').textContent    = t.kodeTiket || '-';
+  document.getElementById('modalPeserta').textContent      = '👤 ' + namaUser;
+
+  // Generate QR
+  var canvas = document.getElementById('qrCanvas');
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Buat QR code ke div sementara lalu pindah ke canvas
+  var tempDiv = document.createElement('div');
+  tempDiv.style.display = 'none';
+  document.body.appendChild(tempDiv);
+  try {
+    var qr = new QRCode(tempDiv, {
+      text: t.kodeTiket + '|' + (t.nama || '') + '|' + namaUser,
+      width: 160, height: 160,
+      colorDark: '#0f2044', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    setTimeout(function() {
+      var img = tempDiv.querySelector('img') || tempDiv.querySelector('canvas');
+      if (img) {
+        var i = new Image();
+        i.onload = function() { ctx.drawImage(i, 0, 0, 160, 160); };
+        i.src = img.src || img.toDataURL();
+      }
+      document.body.removeChild(tempDiv);
+    }, 100);
+  } catch(e) {
+    document.body.removeChild(tempDiv);
+  }
+
+  document.getElementById('modalTiket').classList.add('open');
+}
+
+function tutupModal() {
+  document.getElementById('modalTiket').classList.remove('open');
+}
+
+function printTiket() {
+  window.print();
+}
+
 
 loadTickets();
 </script>
