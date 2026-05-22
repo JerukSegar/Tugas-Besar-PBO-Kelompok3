@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verifikasi OTP - EventHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #eef2f7;
+      background-image: radial-gradient(circle at 20% 30%, rgba(59,130,246,0.07) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(99,102,241,0.07) 0%, transparent 50%);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #fff; border-radius: 20px;
+      padding: 44px 40px; width: 100%; max-width: 440px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 20px 40px rgba(0,0,0,0.08);
+      animation: slideUp 0.4s ease;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .icon-wrap {
+      width: 68px; height: 68px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .icon-wrap svg { width: 32px; height: 32px; color: #fff; }
+
+    h1 { font-size: 22px; font-weight: 700; color: #111827; text-align: center; }
+    .subtitle { font-size: 14px; color: #6b7280; text-align: center; margin-top: 8px; line-height: 1.6; }
+    .email-display {
+      display: inline-block; background: #eff6ff; color: #3b82f6;
+      font-weight: 600; padding: 2px 8px; border-radius: 6px; font-size: 13px;
+    }
+
+    /* OTP Input boxes */
+    .otp-group {
+      display: flex; gap: 10px; justify-content: center;
+      margin-top: 28px;
+    }
+    .otp-input {
+      width: 52px; height: 58px;
+      border: 1.5px solid #e5e7eb; border-radius: 12px;
+      font-size: 24px; font-weight: 700; color: #111827;
+      text-align: center; outline: none;
+      background: #f9fafb; font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .otp-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      background: #fff;
+    }
+    .otp-input.filled {
+      border-color: #6366f1;
+      background: #f5f3ff;
+      color: #6366f1;
+    }
+    .otp-input.error-box { border-color: #ef4444 !important; background: #fef2f2 !important; }
+
+    /* Hint OTP dummy */
+    .otp-hint {
+      margin-top: 16px; text-align: center;
+      background: #fefce8; border: 1px solid #fde68a;
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; color: #92400e;
+    }
+    .otp-hint strong { font-weight: 700; letter-spacing: 2px; color: #b45309; }
+
+    .btn {
+      margin-top: 22px; width: 100%; padding: 14px;
+      border: none; border-radius: 10px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1);
+      color: #fff; font-size: 15px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .resend-wrap {
+      text-align: center; margin-top: 18px;
+      font-size: 13px; color: #6b7280;
+    }
+    .resend-btn {
+      background: none; border: none; cursor: pointer;
+      color: #3b82f6; font-weight: 600; font-family: inherit;
+      font-size: 13px; padding: 0;
+    }
+    .resend-btn:disabled { color: #9ca3af; cursor: not-allowed; }
+
+    .back-link {
+      text-align: center; margin-top: 16px;
+      font-size: 14px; color: #6b7280;
+    }
+    .back-link a { color: #3b82f6; font-weight: 600; text-decoration: none; }
+    .back-link a:hover { text-decoration: underline; }
+
+    .alert {
+      display: none; margin-top: 14px;
+      padding: 12px 14px; border-radius: 8px;
+      font-size: 13px; font-weight: 500;
+    }
+    .alert.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .alert.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+    /* Shake animation on error */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake { animation: shake 0.4s ease; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon-wrap">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12 19.79 19.79 0 0 1 1.93 3.45 2 2 0 0 1 3.92 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+    </div>
+
+    <h1>Verifikasi OTP</h1>
+    <p class="subtitle">
+      Kode OTP telah "dikirim" ke<br>
+      <span class="email-display" id="emailDisplay">email@anda.com</span>
+    </p>
+
+    <!-- Hint dummy OTP untuk dosen/demo -->
+    <div class="otp-hint">
+      🔑 Kode OTP demo: <strong>123456</strong>
+    </div>
+
+    <div class="otp-group" id="otpGroup">
+      <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" />
+      <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" />
+      <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" />
+      <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" />
+      <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" />
+      <input class="otp-input" maxlength="1" type="text" inputmode="numeric" pattern="[0-9]*" />
+    </div>
+
+    <div class="alert" id="alert"></div>
+
+    <button class="btn" id="verifyBtn" onclick="verifikasiOTP()">Verifikasi OTP</button>
+
+    <div class="resend-wrap">
+      Tidak menerima kode? &nbsp;
+      <button class="resend-btn" id="resendBtn" onclick="resendOTP()">Kirim ulang</button>
+      <span id="timerDisplay" style="display:none; color:#6b7280;"></span>
+    </div>
+
+    <p class="back-link">
+      <a href="lupa_password.html">← Ganti email</a>
+    </p>
+  </div>
+
+  <script>
+    // Tampilkan email dari session
+    const email = sessionStorage.getItem('resetEmail') || 'email@anda.com';
+    document.getElementById('emailDisplay').textContent = email;
+
+    // OTP dummy
+    const DUMMY_OTP = '123456';
+    let timerInterval = null;
+
+    // ---- OTP Input Logic ----
+    const inputs = document.querySelectorAll('.otp-input');
+
+    inputs.forEach((input, idx) => {
+      input.addEventListener('input', e => {
+        const val = e.target.value.replace(/\D/g, '');
+        input.value = val;
+        input.classList.toggle('filled', val !== '');
+
+        if (val && idx < inputs.length - 1) {
+          inputs[idx + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !input.value && idx > 0) {
+          inputs[idx - 1].focus();
+          inputs[idx - 1].value = '';
+          inputs[idx - 1].classList.remove('filled');
+        }
+      });
+
+      input.addEventListener('paste', e => {
+        e.preventDefault();
+        const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+        [...paste].slice(0, 6).forEach((char, i) => {
+          if (inputs[i]) {
+            inputs[i].value = char;
+            inputs[i].classList.add('filled');
+          }
+        });
+      });
+    });
+
+    function getOTPValue() {
+      return [...inputs].map(i => i.value).join('');
+    }
+
+    function verifikasiOTP() {
+      const otp = getOTPValue();
+      const alertEl = document.getElementById('alert');
+      alertEl.style.display = 'none';
+      inputs.forEach(i => i.classList.remove('error-box'));
+
+      if (otp.length < 6) {
+        showError('Masukkan 6 digit kode OTP.');
+        return;
+      }
+
+      // Verifikasi ke backend (atau dummy langsung)
+      fetch('/api/forgot-password/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, otp: otp })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          sessionStorage.setItem('otpVerified', 'true');
+          window.location.href = 'reset_password.html';
+        } else {
+          showError(data.message || 'Kode OTP salah.');
+          shakeOTP();
+        }
+      })
+      .catch(() => {
+        // Fallback dummy: cek langsung
+        if (otp === DUMMY_OTP) {
+          sessionStorage.setItem('otpVerified', 'true');
+          window.location.href = 'reset_password.html';
+        } else {
+          showError('Kode OTP salah. Coba lagi.');
+          shakeOTP();
+        }
+      });
+    }
+
+    function showError(msg) {
+      const alertEl = document.getElementById('alert');
+      alertEl.className = 'alert error';
+      alertEl.textContent = msg;
+      alertEl.style.display = 'block';
+      inputs.forEach(i => i.classList.add('error-box'));
+    }
+
+    function shakeOTP() {
+      const group = document.getElementById('otpGroup');
+      group.classList.remove('shake');
+      void group.offsetWidth;
+      group.classList.add('shake');
+    }
+
+    function resendOTP() {
+      const resendBtn = document.getElementById('resendBtn');
+      const timerDisplay = document.getElementById('timerDisplay');
+      let seconds = 60;
+
+      resendBtn.disabled = true;
+      resendBtn.style.display = 'none';
+      timerDisplay.style.display = 'inline';
+      timerDisplay.textContent = `Kirim ulang dalam ${seconds}s`;
+
+      timerInterval = setInterval(() => {
+        seconds--;
+        timerDisplay.textContent = `Kirim ulang dalam ${seconds}s`;
+        if (seconds <= 0) {
+          clearInterval(timerInterval);
+          resendBtn.disabled = false;
+          resendBtn.style.display = 'inline';
+          timerDisplay.style.display = 'none';
+        }
+      }, 1000);
+
+      // Reset input
+      inputs.forEach(i => { i.value = ''; i.classList.remove('filled', 'error-box'); });
+      inputs[0].focus();
+
+      const alertEl = document.getElementById('alert');
+      alertEl.className = 'alert success';
+      alertEl.textContent = 'Kode OTP baru telah dikirim (kode demo: 123456).';
+      alertEl.style.display = 'block';
+    }
+
+    inputs[0].focus();
+  </script>
+</body>
+</html>

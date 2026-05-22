@@ -90,8 +90,7 @@ public class AuthController {
         return result;
     }
 
-    // DELETE /api/auth/delete/{id}
-    @DeleteMapping("/delete/{id}")
+    // DELETE /api/auth/delete/{id}eleteMapping("/delete/{id}")
     public Map<String, Object> delete(@PathVariable Long id) {
         if (!userRepository.existsById(id)) {
             return Map.of("success", false, "message", "User tidak ditemukan!");
