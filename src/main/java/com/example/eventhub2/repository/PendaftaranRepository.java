@@ -1,6 +1,9 @@
-package com.example.eventhub2;
+package com.example.eventhub2.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.example.eventhub2.model.Pendaftaran;
+
 import java.util.List;
 
 public interface PendaftaranRepository extends JpaRepository<Pendaftaran, Long> {

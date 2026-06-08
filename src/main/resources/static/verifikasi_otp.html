@@ -76,8 +76,26 @@
       background: #fefce8; border: 1px solid #fde68a;
       border-radius: 8px; padding: 10px 14px;
       font-size: 13px; color: #92400e;
+      transition: all 0.3s ease;
     }
-    .otp-hint strong { font-weight: 700; letter-spacing: 2px; color: #b45309; }
+    .otp-hint strong {
+      font-weight: 700; letter-spacing: 4px; color: #b45309;
+      font-size: 18px;
+    }
+
+    /* Badge "baru" animasi */
+    .badge-baru {
+      display: inline-block;
+      background: #22c55e; color: #fff;
+      font-size: 10px; font-weight: 700;
+      padding: 1px 6px; border-radius: 99px;
+      margin-left: 6px; vertical-align: middle;
+      animation: popIn 0.3s ease;
+    }
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
 
     .btn {
       margin-top: 22px; width: 100%; padding: 14px;
@@ -116,7 +134,6 @@
     .alert.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
     .alert.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
 
-    /* Shake animation on error */
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-6px); }
@@ -139,9 +156,9 @@
       <span class="email-display" id="emailDisplay">email@anda.com</span>
     </p>
 
-    <!-- Hint dummy OTP untuk dosen/demo -->
-    <div class="otp-hint">
-      🔑 Kode OTP demo: <strong>123456</strong>
+    <!-- Hint OTP untuk demo -->
+    <div class="otp-hint" id="otpHint">
+      🔑 Kode OTP demo: <strong id="otpDisplay">------</strong>
     </div>
 
     <div class="otp-group" id="otpGroup">
@@ -169,15 +186,36 @@
   </div>
 
   <script>
-    // Tampilkan email dari session
     const email = sessionStorage.getItem('resetEmail') || 'email@anda.com';
     document.getElementById('emailDisplay').textContent = email;
 
-    // OTP dummy
-    const DUMMY_OTP = '123456';
     let timerInterval = null;
 
-    // ---- OTP Input Logic ----
+    // ── Generate OTP random 6 digit ──────────────────────────────────────────
+    function generateOTP() {
+      return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    // Simpan OTP aktif di variabel (bukan hardcoded)
+    let currentOTP = generateOTP();
+
+    function tampilkanOTP(otp, isNew = false) {
+      const display = document.getElementById('otpDisplay');
+      display.textContent = otp;
+      // Tambahkan badge "BARU" saat resend
+      if (isNew) {
+        const badge = document.createElement('span');
+        badge.className = 'badge-baru';
+        badge.textContent = 'BARU';
+        display.after(badge);
+        setTimeout(() => badge.remove(), 3000);
+      }
+    }
+
+    // Tampilkan OTP awal saat halaman dibuka
+    tampilkanOTP(currentOTP);
+
+    // ── OTP Input Logic ──────────────────────────────────────────────────────
     const inputs = document.querySelectorAll('.otp-input');
 
     inputs.forEach((input, idx) => {
@@ -185,10 +223,7 @@
         const val = e.target.value.replace(/\D/g, '');
         input.value = val;
         input.classList.toggle('filled', val !== '');
-
-        if (val && idx < inputs.length - 1) {
-          inputs[idx + 1].focus();
-        }
+        if (val && idx < inputs.length - 1) inputs[idx + 1].focus();
       });
 
       input.addEventListener('keydown', e => {
@@ -203,10 +238,7 @@
         e.preventDefault();
         const paste = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
         [...paste].slice(0, 6).forEach((char, i) => {
-          if (inputs[i]) {
-            inputs[i].value = char;
-            inputs[i].classList.add('filled');
-          }
+          if (inputs[i]) { inputs[i].value = char; inputs[i].classList.add('filled'); }
         });
       });
     });
@@ -215,6 +247,7 @@
       return [...inputs].map(i => i.value).join('');
     }
 
+    // ── Verifikasi ───────────────────────────────────────────────────────────
     function verifikasiOTP() {
       const otp = getOTPValue();
       const alertEl = document.getElementById('alert');
@@ -226,7 +259,14 @@
         return;
       }
 
-      // Verifikasi ke backend (atau dummy langsung)
+      // Cek langsung ke currentOTP (fallback demo tanpa backend)
+      if (otp === currentOTP) {
+        sessionStorage.setItem('otpVerified', 'true');
+        window.location.href = 'reset_password.html';
+        return;
+      }
+
+      // Jika ada backend, coba verifikasi ke server
       fetch('/api/forgot-password/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -238,41 +278,25 @@
           sessionStorage.setItem('otpVerified', 'true');
           window.location.href = 'reset_password.html';
         } else {
-          showError(data.message || 'Kode OTP salah.');
+          showError(data.message || 'Kode OTP salah. Periksa kembali kode Anda.');
           shakeOTP();
         }
       })
       .catch(() => {
-        // Fallback dummy: cek langsung
-        if (otp === DUMMY_OTP) {
-          sessionStorage.setItem('otpVerified', 'true');
-          window.location.href = 'reset_password.html';
-        } else {
-          showError('Kode OTP salah. Coba lagi.');
-          shakeOTP();
-        }
+        showError('Kode OTP salah. Periksa kembali kode Anda.');
+        shakeOTP();
       });
     }
 
-    function showError(msg) {
-      const alertEl = document.getElementById('alert');
-      alertEl.className = 'alert error';
-      alertEl.textContent = msg;
-      alertEl.style.display = 'block';
-      inputs.forEach(i => i.classList.add('error-box'));
-    }
-
-    function shakeOTP() {
-      const group = document.getElementById('otpGroup');
-      group.classList.remove('shake');
-      void group.offsetWidth;
-      group.classList.add('shake');
-    }
-
+    // ── Resend OTP ───────────────────────────────────────────────────────────
     function resendOTP() {
       const resendBtn = document.getElementById('resendBtn');
       const timerDisplay = document.getElementById('timerDisplay');
       let seconds = 60;
+
+      // Generate OTP baru
+      currentOTP = generateOTP();
+      tampilkanOTP(currentOTP, true);
 
       resendBtn.disabled = true;
       resendBtn.style.display = 'none';
@@ -290,14 +314,29 @@
         }
       }, 1000);
 
-      // Reset input
+      // Reset input boxes
       inputs.forEach(i => { i.value = ''; i.classList.remove('filled', 'error-box'); });
       inputs[0].focus();
 
       const alertEl = document.getElementById('alert');
       alertEl.className = 'alert success';
-      alertEl.textContent = 'Kode OTP baru telah dikirim (kode demo: 123456).';
+      alertEl.textContent = `Kode OTP baru telah dikirim. Gunakan kode demo yang tertera di atas.`;
       alertEl.style.display = 'block';
+    }
+
+    function showError(msg) {
+      const alertEl = document.getElementById('alert');
+      alertEl.className = 'alert error';
+      alertEl.textContent = msg;
+      alertEl.style.display = 'block';
+      inputs.forEach(i => i.classList.add('error-box'));
+    }
+
+    function shakeOTP() {
+      const group = document.getElementById('otpGroup');
+      group.classList.remove('shake');
+      void group.offsetWidth;
+      group.classList.add('shake');
     }
 
     inputs[0].focus();

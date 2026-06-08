@@ -1,4 +1,4 @@
-package com.example.eventhub2;
+package com.example.eventhub2.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

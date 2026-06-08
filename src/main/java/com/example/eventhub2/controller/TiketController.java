@@ -1,7 +1,17 @@
-package com.example.eventhub2;
+package com.example.eventhub2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.eventhub2.model.CheckIn;
+import com.example.eventhub2.model.Event;
+import com.example.eventhub2.model.Pendaftaran;
+import com.example.eventhub2.model.Tiket;
+import com.example.eventhub2.repository.CheckInRepository;
+import com.example.eventhub2.repository.EventRepository;
+import com.example.eventhub2.repository.PendaftaranRepository;
+import com.example.eventhub2.repository.TiketRepository;
+
 import java.util.*;
 import java.time.LocalDate;
 import java.time.LocalTime;

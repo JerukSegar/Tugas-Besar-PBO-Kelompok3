@@ -1,4 +1,4 @@
-package com.example.eventhub2;
+package com.example.eventhub2.model;
 
 /**
  * Penyelenggara adalah turunan dari User (inheritance).

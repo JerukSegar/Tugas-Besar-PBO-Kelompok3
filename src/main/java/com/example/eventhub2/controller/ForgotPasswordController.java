@@ -1,8 +1,11 @@
-package com.example.eventhub2;
+package com.example.eventhub2.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.eventhub2.model.User;
+import com.example.eventhub2.repository.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;
