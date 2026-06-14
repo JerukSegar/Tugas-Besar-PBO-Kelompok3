@@ -162,7 +162,6 @@ public class Event {
         this.createdBy = createdBy;
     }
 
-    // Method dari class diagram
     public String tampilkanDetail() {
         return "Event: " + nama + " | Tanggal: " + tanggal + " | Lokasi: " + lokasi;
     }

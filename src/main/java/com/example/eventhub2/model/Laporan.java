@@ -90,7 +90,6 @@ public class Laporan {
         this.dibuatAt = v;
     }
 
-    // Method dari class diagram
     public String generateLaporan() {
         return "Laporan event ID: " + eventId + " berhasil digenerate!";
     }

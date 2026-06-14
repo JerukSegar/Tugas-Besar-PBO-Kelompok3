@@ -74,7 +74,6 @@ public class Tiket {
         this.diterbitkanAt = v;
     }
 
-    // Method dari class diagram
     public String tampilkanDetailTiket() {
         return "Tiket QR: " + kodeQr + " | Status: " + statusTiket;
     }

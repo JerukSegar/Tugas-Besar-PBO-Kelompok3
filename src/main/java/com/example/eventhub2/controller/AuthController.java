@@ -16,7 +16,7 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    // POST /api/auth/register
+    
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody Map<String, Object> body) {
         String nama     = (String) body.get("nama");
@@ -41,7 +41,7 @@ public class AuthController {
         return Map.of("success", true, "message", "Akun berhasil dibuat!");
     }
 
-    // POST /api/auth/login
+    
     @PostMapping("/login")
     public Map<String, Object> login(@RequestBody Map<String, Object> body) {
         String email    = (String) body.get("email");
@@ -66,7 +66,7 @@ public class AuthController {
         return result;
     }
 
-    // PUT /api/auth/update/{id}
+    
     @PutMapping("/update/{id}")
     public Map<String, Object> update(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         Optional<User> userOpt = userRepository.findById(id);
@@ -94,7 +94,7 @@ public class AuthController {
         return result;
     }
 
-    // DELETE /api/auth/delete/{id}eleteMapping("/delete/{id}")
+    
     public Map<String, Object> delete(@PathVariable Long id) {
         if (!userRepository.existsById(id)) {
             return Map.of("success", false, "message", "User tidak ditemukan!");

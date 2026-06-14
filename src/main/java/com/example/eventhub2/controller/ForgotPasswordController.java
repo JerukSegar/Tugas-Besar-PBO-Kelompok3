@@ -24,19 +24,13 @@ import java.util.Optional;
 @RequestMapping("/api/forgot-password")
 public class ForgotPasswordController {
 
-    // OTP dummy statis — sesuai permintaan dosen (tidak perlu kirim email)
     private static final String DUMMY_OTP = "123456";
 
-    // Simpan sesi OTP sementara di memori: email -> OTP
-    // (Untuk produksi gunakan database / Redis dengan expiry)
     private final Map<String, String> otpStore = new HashMap<>();
 
     @Autowired
     private UserRepository userRepository;
 
-    // ----------------------------------------------------------------
-    // 1. Request OTP — cek apakah email terdaftar
-    // ----------------------------------------------------------------
     @PostMapping("/request")
     public ResponseEntity<Map<String, Object>> requestOtp(@RequestBody Map<String, String> body) {
         Map<String, Object> response = new HashMap<>();
@@ -48,7 +42,6 @@ public class ForgotPasswordController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // Cek apakah email terdaftar di database
         Optional<User> userOpt = userRepository.findByEmail(email.trim());
         if (userOpt.isEmpty()) {
             response.put("success", false);
@@ -56,10 +49,8 @@ public class ForgotPasswordController {
             return ResponseEntity.ok(response);
         }
 
-        // Simpan OTP dummy ke store sementara
         otpStore.put(email.trim(), DUMMY_OTP);
 
-        // Di sini seharusnya kirim email — tapi karena dummy, kita skip
         System.out.println("[DEBUG] OTP untuk " + email + " adalah: " + DUMMY_OTP);
 
         response.put("success", true);
@@ -67,9 +58,6 @@ public class ForgotPasswordController {
         return ResponseEntity.ok(response);
     }
 
-    // ----------------------------------------------------------------
-    // 2. Verify OTP — cocokkan kode yang dimasukkan user
-    // ----------------------------------------------------------------
     @PostMapping("/verify-otp")
     public ResponseEntity<Map<String, Object>> verifyOtp(@RequestBody Map<String, String> body) {
         Map<String, Object> response = new HashMap<>();
@@ -96,15 +84,11 @@ public class ForgotPasswordController {
             return ResponseEntity.ok(response);
         }
 
-        // OTP cocok — tandai verified (masih simpan di store untuk step reset)
         response.put("success", true);
         response.put("message", "OTP berhasil diverifikasi.");
         return ResponseEntity.ok(response);
     }
 
-    // ----------------------------------------------------------------
-    // 3. Reset Password — simpan password baru ke database
-    // ----------------------------------------------------------------
     @PostMapping("/reset")
     public ResponseEntity<Map<String, Object>> resetPassword(@RequestBody Map<String, String> body) {
         Map<String, Object> response = new HashMap<>();
@@ -117,14 +101,12 @@ public class ForgotPasswordController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // Pastikan OTP sudah pernah di-request untuk email ini
         if (!otpStore.containsKey(email.trim())) {
             response.put("success", false);
             response.put("message", "Sesi reset tidak valid. Silakan ulangi dari awal.");
             return ResponseEntity.ok(response);
         }
 
-        // Cari user dan update password
         Optional<User> userOpt = userRepository.findByEmail(email.trim());
         if (userOpt.isEmpty()) {
             response.put("success", false);
@@ -134,14 +116,10 @@ public class ForgotPasswordController {
 
         User user = userOpt.get();
 
-        // ⚠️ CATATAN: Jika project menggunakan BCrypt, uncomment baris di bawah:
-        // user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
-        // Untuk sementara (plain text / sesuai implementasi existing):
         user.setPassword(newPassword);
 
         userRepository.save(user);
 
-        // Hapus OTP dari store setelah berhasil
         otpStore.remove(email.trim());
 
         response.put("success", true);

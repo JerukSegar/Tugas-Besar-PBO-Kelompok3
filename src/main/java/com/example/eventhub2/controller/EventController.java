@@ -33,8 +33,6 @@ public class EventController {
     @Autowired
     private TiketRepository tiketRepository;
 
-
-    // ── Helper: cek apakah event sudah mulai ─────────────────────────────────
     private boolean isEventSudahMulai(Event ev) {
         try {
             LocalDate tglEvent = LocalDate.parse(
@@ -55,13 +53,11 @@ public class EventController {
         }
     }
 
-    // GET /api/events
     @GetMapping
     public List<Event> getAllEvents() {
         return eventRepository.findAll();
     }
 
-    // GET /api/events/{id}
     @GetMapping("/{id}")
     public Map<String, Object> getEventById(@PathVariable Long id) {
         Optional<Event> ev = eventRepository.findById(id);
@@ -71,7 +67,6 @@ public class EventController {
         return Map.of("success", true, "event", ev.get());
     }
 
-    // POST /api/events
     @PostMapping
     public Map<String, Object> createEvent(@RequestBody Map<String, Object> body) {
         if (body.get("nama") == null) {
@@ -96,8 +91,6 @@ public class EventController {
 
         return Map.of("success", true, "message", "Event berhasil dibuat!", "id", ev.getId());
     }
-
-    // PUT /api/events/{id}
     @PutMapping("/{id}")
     public Map<String, Object> updateEvent(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         Optional<Event> evOpt = eventRepository.findById(id);
@@ -127,7 +120,6 @@ public class EventController {
         return Map.of("success", true, "message", "Event berhasil diperbarui!");
     }
 
-    // DELETE /api/events/{id}
     @DeleteMapping("/{id}")
     public Map<String, Object> deleteEvent(@PathVariable Long id, @RequestBody Map<String, Object> body) {
         Optional<Event> evOpt = eventRepository.findById(id);
@@ -145,13 +137,11 @@ public class EventController {
         return Map.of("success", true, "message", "Event berhasil dihapus!");
     }
 
-    // GET /api/events/kelola/{userId}
     @GetMapping("/kelola/{userId}")
     public List<Event> getEventByPenyelenggara(@PathVariable Long userId) {
         return eventRepository.findByCreatedBy(userId);
     }
-
-    // POST /api/events/daftar
+    
     @PostMapping("/daftar")
     public Map<String, Object> daftarEvent(@RequestBody Map<String, Object> body) {
         Long userId  = Long.parseLong(body.get("userId").toString());
@@ -183,7 +173,7 @@ public class EventController {
         p.setStatus("upcoming");
         pendaftaranRepository.save(p);
 
-        // Generate tiket gratis atau berbayar
+
         Tiket tiket;
         if ("gratis".equalsIgnoreCase(ev.getTipeHarga()) || "free".equalsIgnoreCase(ev.getTipeHarga())) {
             TiketGratis tg = new TiketGratis();
@@ -211,7 +201,6 @@ public class EventController {
         );
     }
 
-    // GET /api/events/saya/{userId}
     @GetMapping("/saya/{userId}")
     public List<Map<String, Object>> getEventSaya(@PathVariable Long userId) {
         List<Pendaftaran> list = pendaftaranRepository.findByUserId(userId);
@@ -238,7 +227,6 @@ public class EventController {
         }).collect(Collectors.toList());
     }
 
-    // POST /api/events/batal
     @Transactional
     @PostMapping("/batal")
     public Map<String, Object> batalDaftar(@RequestBody Map<String, Object> body) {
@@ -270,7 +258,6 @@ public class EventController {
         return Map.of("success", true, "message", "Pendaftaran berhasil dibatalkan!");
     }
 
-    // GET /api/events/peserta/{eventId}
     @GetMapping("/peserta/{eventId}")
     public Map<String, Object> getPesertaEvent(@PathVariable Long eventId) {
         Optional<Event> evOpt = eventRepository.findById(eventId);

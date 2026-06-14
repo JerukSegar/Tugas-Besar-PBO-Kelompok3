@@ -62,7 +62,6 @@ public class Pendaftaran {
         this.status = status;
     }
 
-    // Method dari class diagram
     public String isiFormPendaftaran() {
         return "Mengisi form pendaftaran event ID: " + eventId;
     }

@@ -34,7 +34,6 @@ public class TiketController {
     @Autowired
     private EventRepository eventRepository;
 
-    // ── Helper: cek apakah event sudah selesai ────────────────────────────────
     private boolean isEventSudahSelesai(Event ev) {
         try {
             LocalDate tglEvent = LocalDate.parse(
@@ -57,14 +56,12 @@ public class TiketController {
         }
     }
 
-    // GET /api/tiket/pendaftaran/{pendaftaranId}
     @GetMapping("/pendaftaran/{pendaftaranId}")
     public Map<String, Object> getTiketByPendaftaran(@PathVariable Long pendaftaranId) {
         List<Tiket> list = tiketRepository.findByPendaftaranId(pendaftaranId);
         return Map.of("success", true, "tiket", list);
     }
 
-    // POST /api/tiket/checkin
     @PostMapping("/checkin")
     public Map<String, Object> checkIn(@RequestBody Map<String, Object> body) {
         String kodeQr        = body.get("kodeQr").toString();
@@ -87,7 +84,6 @@ public class TiketController {
             return Map.of("success", false, "message", "Peserta sudah check-in!");
         }
 
-        // Cek apakah event sudah selesai
         Optional<Pendaftaran> pendOpt = pendaftaranRepository.findById(tiket.getPendaftaranId());
         if (pendOpt.isPresent()) {
             Optional<Event> evOpt = eventRepository.findById(pendOpt.get().getEventId());
@@ -99,7 +95,6 @@ public class TiketController {
             }
         }
 
-        // Simpan check-in
         CheckIn checkIn = new CheckIn();
         checkIn.setTiketId(tiket.getId());
         checkIn.setPenyelenggaraId(penyelenggaraId);

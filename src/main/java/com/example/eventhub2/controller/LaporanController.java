@@ -68,7 +68,6 @@ public class LaporanController {
         return Map.of("success", true, "laporan", hasil, "totalEvent", events.size());
     }
 
-    // GET /api/laporan/event/{eventId}
     @GetMapping("/event/{eventId}")
     public Map<String, Object> getLaporanEvent(@PathVariable Long eventId) {
         Optional<Event> evOpt = eventRepository.findById(eventId);
@@ -97,7 +96,6 @@ public class LaporanController {
         return result;
     }
 
-    // POST /api/laporan/generate/{eventId}
     @PostMapping("/generate/{eventId}")
     public Map<String, Object> generateLaporan(
             @PathVariable Long eventId,
