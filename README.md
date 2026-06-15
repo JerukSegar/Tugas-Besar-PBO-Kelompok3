@@ -14,7 +14,7 @@ EventHub adalah aplikasi berbasis web yang dirancang untuk mempermudah pengelola
 ## Teknologi yang Digunakan
 
 - **Backend:** Java (Spring Boot)
-- **Basis Data:** MySQL / MariaDB
+- **Basis Data:** MySQL
 - **Arsitektur Data:** Terintegrasi dengan Hibernate / Spring Data JPA
 
 ## Panduan Instalasi Sistem
