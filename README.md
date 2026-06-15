@@ -1,4 +1,4 @@
-# EventHub - Sistem Manajemen Acara dan Tiket
+# EventHub - Sistem Manajemen Event dan Peserta
 
 EventHub adalah aplikasi berbasis web yang dirancang untuk mempermudah pengelolaan acara, proses pendaftaran peserta, hingga sistem manajemen tiket dan check-in secara digital. Aplikasi ini dibuat untuk memenuhi tugas besar kuliah.
 
