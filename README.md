@@ -40,3 +40,14 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 server.port=8082
+
+### 4. Menjalankan Sistem
+- Buka project menggunakan IDE
+- Jalankan file utama EventHubApplication.java
+- Tunggu hingga server berjalan
+- Buka browser dan akses http://localhost:8082
+
+### 4. Login ke Sistem
+- Daftar akun baru melalui halaman Register
+- Pilih role Peserta atau Penyelenggara
+- Login menggunakan email dan password yang telah didaftarkan
